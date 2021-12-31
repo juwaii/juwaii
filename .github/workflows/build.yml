@@ -1,0 +1,33 @@
+name: Update GitHub Profile README
+on:
+  push:
+  schedule:
+    - cron: "*/1 * * * *" 
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: checkout repo content
+      uses: actions/checkout@v2
+
+    - name: setup python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: execute py script
+      run: python readme.py
+
+    - name: commit files
+      run: |
+        git config user.name "Gitub README Bot"
+        git config user.email "<>"
+        git add -A
+        git commit -m "update data" -a
+      
+    - name: push changes
+      uses: ad-m/github-push-action@v0.6.0
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: main
